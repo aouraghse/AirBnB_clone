@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-This module activates python cli
+Ce module active l'interface en ligne de commande Python
 """
 import json
 import cmd
@@ -17,7 +17,7 @@ import shlex
 
 
 def ev(val):
-    """converts suitable arguments to int or float"""
+    """convertit les arguments appropriés en entier ou en décimal"""
     for i in val:
         try:
             yield json.loads(i)
@@ -38,23 +38,23 @@ def check_arg(arg2, msg):
 
 
 class HBNBCommand(cmd.Cmd):
-    """CLI for AirBnB clone"""
+    """Interface en ligne de commande pour le clone AirBnB"""
     prompt = '(hbnb) '
     file = None
     classes = ['BaseModel', 'Place', 'State',
                'City', 'Amenity', 'Review', 'User']
 
     def do_EOF(self, line):
-        """Handles EOF(Ctrl + D)"""
+        """EOF(Ctrl + D)"""
         print("")
         return True
 
     def do_quit(self, arg):
-        """Quit command to exit the program"""
+        """Commande Quitter pour quitter le programme"""
         quit()
 
     def do_create(self, args):
-        """Creates a new instance of a class"""
+        """Crée une nouvelle instance d'une classe"""
         arg2 = shlex.split(args)
         if len(arg2) < 1:
             print("** class name missing **")
@@ -67,7 +67,7 @@ class HBNBCommand(cmd.Cmd):
         print(model.id)
 
     def do_show(self, args):
-        """Prints the string representation of an instance """
+        """Affiche la représentation en chaîne d'une instance"""
         arg2 = shlex.split(args)
         if len(arg2) < 1:
             print("** class name missing **")
@@ -89,7 +89,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, args):
-        """Deletes an instance based on the class name and id"""
+        """Supprime une instance en fonction du nom de la classe et de l'identifiant"""
         arg2 = shlex.split(args)
         if len(arg2) < 1:
             print("** class name missing **")
@@ -111,7 +111,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_all(self, args):
-        """Creates a new instance of a class"""
+        """Crée une nouvelle instance d'une classe"""
         arg2 = shlex.split(args)
         if len(arg2) >= 1 and arg2[0] not in self.classes:
             print("** class doesn't exist **")
@@ -130,8 +130,8 @@ class HBNBCommand(cmd.Cmd):
         print(alList)
 
     def do_update(self, args):
-        """Updates an instance based on the class name and id by adding
-        or updating attribute"""
+        """Met à jour une instance en fonction du nom de la classe et de
+        l'identifiant en ajoutant ou en mettant à jour l'attribut"""
         arg2 = shlex.split(args)
         if len(arg2) < 1:
             print("** class name missing **")
@@ -170,7 +170,7 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def default(self, args):
-        """Handles other commands"""
+        """Gère les autres commandes"""
         args = shlex.split(args)
         try:
             arg1, arg2 = args[0].split('.')
@@ -192,24 +192,12 @@ class HBNBCommand(cmd.Cmd):
                 new_list.append(str(value))
 
         if arg2 == "all()":
-            """
-            Retrives all instances
-            Usage: <class name>.all()
-            """
             print(new_list)
 
         elif arg2 == "count()":
-            """
-            Retrieves number of instances of class
-            Usage: <class name>.count()
-            """
             print(len(new_list))
 
         elif "show" in arg2:
-            """
-            Retrieves instance based on id
-            Usage: <class name>.show(<id>)
-            """
             new_id = check_arg(arg2, "show")
             if not new_id:
                 return
@@ -220,10 +208,6 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
         elif "destroy" in arg2:
-            """
-            Destroys instance based on its id
-            Usage: <class name>.destroy(<id>)
-            """
             new_id = check_arg(arg2, "destroy")
             if not new_id:
                 return
@@ -235,10 +219,6 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
         elif "update" in arg2:
-            """
-            Updates instance based on id
-            Usage: <class name>.update(<id>, <name>, <value>)
-            """
             new_arg = check_arg(arg2, "update")
             if not new_arg:
                 return
