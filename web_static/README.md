@@ -1,1 +1,2 @@
-web static
+# web_static
+HTML and CSS

@@ -1,10 +1,14 @@
 #!/usr/bin/python3
-"""contains User class"""
+"""
+User inherits from BaseModel
+"""
 from models.base_model import BaseModel
 
 
 class User(BaseModel):
-    """User class based off BaseModel"""
+    """
+    User class
+    """
     email = ""
     password = ""
     first_name = ""

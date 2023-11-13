@@ -1,9 +1,13 @@
 #!/usr/bin/python3
-"""contains City class"""
+"""
+City module
+"""
 from models.base_model import BaseModel
 
 
 class City(BaseModel):
-    """temp"""
+    """
+    This class creates city objects
+    """
     state_id = ""
     name = ""

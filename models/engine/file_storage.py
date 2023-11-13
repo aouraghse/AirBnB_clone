@@ -1,56 +1,51 @@
 #!/usr/bin/python3
-"""File Storage for AirBnB Clone"""
+"""
+This module contains FileStorage class
+"""
 import json
-from os.path import exists
+from models.base_model import BaseModel
+from models.user import User
+from models.review import Review
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
 
 
 class FileStorage:
-    """Class for FileStorage"""
-
+    """serializes instances to a JSON file and
+    deserializes JSON file to instances"""
     __file_path = "file.json"
-    __objects = dict()
+    __objects = {}
 
     def all(self):
-        """return the dictionary __objects"""
+        """returns __objects"""
         return self.__objects
 
     def new(self, obj):
-        """sets obj in __objects with key <obj class name>.id"""
-        self.__objects[obj.__class__.__name__ + '.' + obj.id] = obj
+        """sets in __objects the obj"""
+        if obj:
+            key = f'{type(obj).__name__}.{obj.id}'
+            self.__objects[key] = obj
 
     def save(self):
-        """serialize __objects to JSON file"""
-        temp = dict()
-        for keys in self.__objects.keys():
-            temp[keys] = self.__objects[keys].to_dict()
-        with open(self.__file_path, mode='w') as jsonfile:
-            json.dump(temp, jsonfile)
+        """serializes __objects to the JSON file"""
+        temp = self.__objects
+        obj_dict = {obj: temp[obj].to_dict() for obj in temp.keys()}
+        with open(self.__file_path, 'w', encoding="utf-8") as f:
+            f.write(json.dumps(obj_dict))
 
     def reload(self):
         """deserializes the JSON file to __objects"""
-        from ..base_model import BaseModel
-        from ..user import User
-        from ..state import State
-        from ..city import City
-        from ..amenity import Amenity
-        from ..place import Place
-        from ..review import Review
+        try:
+            with open(self.__file_path, 'r', encoding="utf-8") as f:
+                data = json.loads(f.read())
+                for key, value in data.items():
+                    model_name, model_id = key.split('.')
+                    try:
+                        self.new(eval(model_name)(**value))
+                    except Exception as e:
+                        print(e)
 
-        if exists(self.__file_path):
-            with open(self.__file_path) as jsonfile:
-                decereal = json.load(jsonfile)
-            for keys in decereal.keys():
-                if decereal[keys]['__class__'] == "BaseModel":
-                    self.__objects[keys] = BaseModel(**decereal[keys])
-                elif decereal[keys]['__class__'] == "User":
-                    self.__objects[keys] = User(**decereal[keys])
-                elif decereal[keys]['__class__'] == "State":
-                    self.__objects[keys] = State(**decereal[keys])
-                elif decereal[keys]['__class__'] == "City":
-                    self.__objects[keys] = City(**decereal[keys])
-                elif decereal[keys]['__class__'] == "Amenity":
-                    self.__objects[keys] = Amenity(**decereal[keys])
-                elif decereal[keys]['__class__'] == "Place":
-                    self.__objects[keys] = Place(**decereal[keys])
-                elif decereal[keys]['__class__'] == "Review":
-                    self.__objects[keys] = Review(**decereal[keys])
+        except Exception:
+            self.__objects = {}
