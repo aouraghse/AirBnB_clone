@@ -1,1 +1,1 @@
-This is my README file for web_static
+This is my README file for Web_Static
